@@ -32,43 +32,26 @@ window.onload = function() {
     console.log("innerRect: ", innerRect);
     
     
-    // example for showing complicated arrays to show multiple data values joined using data() instead of datum()
-    var cityPop = [
-        { 
-            city: 'Madison',
-            population: 233209
-        },
-        {
-            city: 'Milwaukee',
-            population: 594833
-        },
-        {
-            city: 'Green Bay',
-            population: 104057
-        },
-        {
-            city: 'Superior',
-            population: 27244
-        }
-    ];
+    // example for showing arrays to show multiple data values joined using data() instead of datum()
+    var dataArray = [10, 20, 30, 40, 50];
     
     // create a new (empty) circle selection & binding a data array to the container element above
     var circles = container.selectAll(".circles") // selects all matching elements in DOM...but in this case it creates an empty selection since .circles class doesn't yet exist
-        .data(cityPop)
+        .data(dataArray)
         .enter() //joins data to selection & creates an array of placeholders for one markup element per data array value.
         .append("circle") // adds 1 circle to each array datum
         .attr("class", "circles") // applies class of "circles" to each datum
         
-        // calculate radius based on city population as circle area, where "d" is the data of the selection; i is the index
-        .attr("r", function(d) {
-            var area = d.population * 0.01;
-            return Math.sqrt(area/Math.PI);
+        // use function to create the circle's radius & get current datum (d), the current index (i) as default values within the attr() function
+        .attr("r", function(d, i) {
+            console.log("d: ", d, "i: ", i);
+            return d;
         })
         .attr("cx", function(d, i) {    // x coord
-            return 90 + (i * 180);
+            return 70 + (i * 180);
         })
         .attr("cy", function(d) {   // y coord
-            return 450 - (d.population * 0.0005);
+            return 450 - (d * 5);
         });
     console.log("Circles: ", circles);
 };
