@@ -66,19 +66,14 @@ window.onload = function() {
     
     // x-coordinate scale object (as a generator function to create another array of values)
     var xScale = d3.scaleLinear()
-        .range([90, 745]) // output min & max
+        .range([90, 810]) // output min & max
         .domain([0, 3]); // input min & max    
     
     // scale y-coordinate circles using max & min values
     var yScale = d3.scaleLinear()
-        .range([440, 50])   // 440 is listed 1st since it's the higher range & SVG coord [0,0] is UPPER LEFT corner
-//        .domain([minPop, maxPop]);
-        .domain([0, 700000]);   // add manual max & min so scale bar would reach entire graph
-    
-    // color scale generator
-    var color = d3.scaleLinear()
-        .range(["#FDBE85", "#D94701"])
+        .range([440, 95])   // 440 is listed 1st since it's the higher range & SVG coord [0,0] is UPPER LEFT corner
         .domain([minPop, maxPop]);
+    
     
     // create a new (empty) circle selection & binding a data array to the container element above
     var circles = container.selectAll(".circles") // selects all matching elements in DOM...but in this case it creates an empty selection since .circles class doesn't yet exist
@@ -100,70 +95,6 @@ window.onload = function() {
         })
         .attr("cy", function(d){
             return yScale(d.population);
-        })
-        .style("fill", function(d, i) { // add a fill based on color() scale generator function 
-            return color(d.population);
-        })
-        .style("stroke", "#000"); // black circle strokes
-        
-        // create a y-axis generator oriented left & append to the "axis" group ("g") container
-        var yAxis = d3.axisLeft(yScale)
-            .scale(yScale);
-//            .orient("bottom");  //from d3 version 3
-    
-        var axis = container.append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(50,0)")  // moves svg scalebar right 50 pixels
-            .call(yAxis);  
-//        yAxis(axis);  code same as ".call(yAxis)" since it runs the generator function using the scale() function
-    
-        var title = container.append("text")
-            .attr("class", "title")
-            .attr("text-anchor", "middle")
-            .attr("x", 450)
-            .attr("y", 30)
-            .text("City Populations");
-    
-        // bubble labels
-    var labels = container.selectAll(".labels")
-        .data(cityPop)
-        .enter()
-        .append("text")
-        .attr("class", "labels")
-        .attr("text-anchor", "left")
-        .attr("dy", "-5") // add vertical offset to svg label
-    
-        // maintain y axis in labels
-        .attr("y", function(d){
-            //vertical position centered on each circle
-            return yScale(d.population) + 5;
         });
-    
-    // appends a tspan label line for easier word wrapping for x axis
-    var nameLabel = labels.append("tspan")
-        .attr("class", "nameLine")
-        .attr("x", function(d,i){
-            //horizontal position to the right of each circle
-            return xScale(i) + Math.sqrt(d.population * 0.01 / Math.PI) + 5;
-        })        
-        .text(function(d) {
-            return d.city;
-        });
-    
-    // format with comma
-    var commaFormat = d3.format(",");
-    
-    // appends 2nd line label
-    var popLabel = labels.append("tspan")
-        .attr("class", "popLine")
-        .attr("x", function(d,i){
-            //horizontal position to the right of each circle
-            return xScale(i) + Math.sqrt(d.population * 0.01 / Math.PI) + 5;
-        })
-        .attr("dy", "15") // add vertical offset to svg label
-        .text(function(d){
-            return "Pop. " + commaFormat(d.population);
-        });        
-        
-            
+//    console.log("Circles: ", circles);
 };
